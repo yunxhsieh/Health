@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="robots" content="noindex,nofollow"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>我的專屬連結</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@700&family=Noto+Sans+TC:wght@400;500&display=swap">
+<style>
+:root{--bg:#F7F1F2;--ink:#2E2729;--mut:#7A6E71;--jade:#9A6670;--tint:#EEDFE1;--card:#FFFCFC;--line:#E0D3D5;--on:#fff;--red:#B8372B;
+padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1F1819;--ink:#F4EDEE;--mut:#B6A7AA;--jade:#E3AAB4;--tint:#3A2E31;--card:#282022;--line:#443639;--on:#2B1D20;--red:#F0867A}}
+:root[data-theme="dark"]{--bg:#1F1819;--ink:#F4EDEE;--mut:#B6A7AA;--jade:#E3AAB4;--tint:#3A2E31;--card:#282022;--line:#443639;--on:#2B1D20;--red:#F0867A}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;line-height:1.7}
+.wrap{max-width:560px;margin:0 auto;padding:28px 16px 56px}
+h1{font-family:"Noto Serif TC",serif;font-size:28px;line-height:1.4;margin:6px 0 10px}
+.mut{color:var(--mut);font-size:14px}
+label{display:block;font-weight:500;margin:20px 0 6px}
+input{width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);font:16px "Noto Sans TC",sans-serif}
+input:focus-visible,button:focus-visible,a:focus-visible{outline:3px solid var(--jade);outline-offset:2px}
+.hint{font-size:13px;color:var(--mut);margin-top:4px}
+.btn{display:block;width:100%;padding:14px;border:0;border-radius:999px;background:var(--jade);color:var(--on);font:500 16px "Noto Sans TC",sans-serif;cursor:pointer;margin-top:20px;text-align:center;text-decoration:none}
+.btn.alt{background:transparent;color:var(--jade);border:1.5px solid var(--jade);margin-top:10px}
+.card{background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:16px;margin:16px 0}
+.card h2{font-family:"Noto Serif TC",serif;font-size:19px;margin:0 0 4px;color:var(--jade)}
+code{display:block;font-size:12.5px;word-break:break-all;color:var(--mut);background:var(--tint);border-radius:10px;padding:8px 10px;margin:8px 0}
+.row{display:flex;gap:8px}.row .btn{margin-top:4px}
+.err{color:var(--red);font-size:14px;margin-top:10px;min-height:20px}
+.say{background:var(--tint);border-radius:12px;padding:10px 14px;font-size:15px;margin:8px 0}
+.ok{color:var(--jade);font-size:14px;min-height:22px;margin-top:6px}
+[hidden]{display:none!important}
+</style></head><body><main class="wrap">
+<p class="mut">婕樂纖絕美團隊</p>
+<h1>我的專屬連結</h1>
+<p class="mut">填入你的名字和 LINE 連結，就會自動生成你專屬的「客人測驗連結」和「懶人包連結」。客人完成後按下去，會直接開你的 LINE。</p>
+
+<label for="nm">你的名字（客人會看到）</label>
+<input id="nm" placeholder="例如：小美" maxlength="20" autocomplete="off">
+
+<label for="ln">你的 LINE 連結</label>
+<input id="ln" placeholder="https://line.me/ti/p/... 或 https://lin.ee/..." inputmode="url" autocapitalize="off" autocomplete="off">
+<div class="hint">在 LINE 的「主頁」→「加好友」→「分享我的 ID／QR 碼」→ 複製連結。連結需要以 https://line.me/ 或 https://lin.ee/ 開頭。</div>
+
+<button class="btn" id="go">產生我的連結</button>
+<div class="err" id="er" role="alert"></div>
+
+<div id="out" hidden>
+ <div class="card"><h2>① 客人測驗連結</h2><p class="mut" style="margin:0">貼在 IG 個人簡介、限動連結、私訊。客人做完測驗，會用 LINE 找你。</p>
+ <code id="u1"></code>
+ <div class="row"><button class="btn" id="c1">複製連結</button><a class="btn alt" id="t1" target="_blank" rel="noopener" style="margin-top:4px">開啟測試</a></div></div>
+ <div class="card"><h2>② 懶人包連結</h2><p class="mut" style="margin:0">客人來找你領懶人包時，直接傳給他。</p>
+ <code id="u2"></code>
+ <div class="row"><button class="btn" id="c2">複製連結</button><a class="btn alt" id="t2" target="_blank" rel="noopener" style="margin-top:4px">開啟測試</a></div></div>
+ <div class="card"><h2>③ 可以直接貼的簡介文字</h2>
+ <div class="say" id="bio"></div>
+ <button class="btn" id="c3" style="margin-top:8px">複製文字</button></div>
+ <div class="ok" id="ok" role="status"></div>
+ <p class="mut">請先用「開啟測試」確認：頁面能打開、最後按下去會開到你的 LINE。如果沒有，請把畫面截圖給團隊長。</p>
+</div>
+</main>
+<script>
+var BASE=location.origin+location.pathname.replace(/join(\.html)?\/?$/,"").replace(/\/?$/,"/"),QUIZ=BASE,PACK=BASE+"pack.html";
+var $=function(i){return document.getElementById(i)};
+function store(k,v){try{if(v===undefined)return localStorage.getItem(k)||"";localStorage.setItem(k,v)}catch(e){return ""}}
+$("nm").value=store("p_nm");$("ln").value=store("p_ln");
+function say(t){$("ok").textContent=t;setTimeout(function(){$("ok").textContent=""},2500)}
+function copy(t){var e=document.createElement("textarea");e.value=t;e.setAttribute("readonly","");e.style.cssText="position:fixed;opacity:0;top:0";document.body.appendChild(e);e.select();try{document.execCommand("copy")}catch(x){}document.body.removeChild(e);try{navigator.clipboard.writeText(t)}catch(x){}say("已複製")}
+var u1="",u2="",bio="";
+$("go").onclick=function(){
+ var nm=$("nm").value.trim().slice(0,20),ln=$("ln").value.trim(),er=$("er");er.textContent="";
+ if(!nm){er.textContent="請先填名字";return}
+ if(!ln){er.textContent="請貼上你的 LINE 連結";return}
+ if((ln.indexOf("https://line.me/")!==0&&ln.indexOf("https://lin.ee/")!==0)||ln.length>200||/["'<>\s]/.test(ln)){er.textContent="LINE 連結需要以 https://line.me/ 或 https://lin.ee/ 開頭，且中間不能有空格";return}
+ store("p_nm",nm);store("p_ln",ln);
+ var q="?ref="+encodeURIComponent(nm)+"&line="+encodeURIComponent(ln);
+ u1=QUIZ+q;u2=PACK+q;
+ bio="想知道你的好菌補夠了嗎？1 分鐘免費檢測 👇\n"+u1;
+ $("u1").textContent=u1;$("u2").textContent=u2;$("bio").textContent=bio;
+ $("t1").href=u1;$("t2").href=u2;$("out").hidden=false;$("out").scrollIntoView({behavior:"smooth"});
+};
+$("c1").onclick=function(){copy(u1)};$("c2").onclick=function(){copy(u2)};$("c3").onclick=function(){copy(bio)};
+</script></body></html>
